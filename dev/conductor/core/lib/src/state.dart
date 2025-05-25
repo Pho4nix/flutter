@@ -156,40 +156,6 @@ String phaseInstructions(pb.ConductorState state) {
       return <String>[
         'Either all cherrypicks have been auto-applied or there were none.',
       ].join('\n');
-    case ReleasePhase.UPDATE_ENGINE_VERSION:
-      return 'The conductor will now update the engine.version file to point at the previous commit.';
-    case ReleasePhase.PUBLISH_VERSION:
-      if (!requiresFrameworkPR(state)) {
-        return 'Since there are no code changes in this release, no Framework '
-            'PR is necessary.';
-      }
-
-      final String newPrLink = globals.getNewPrLink(
-        userName: githubAccount(state.framework.mirror.url),
-        repoName: 'flutter',
-        state: state,
-      );
-      return <String>[
-        'Your working branch ${state.framework.workingBranch} was pushed to your mirror.',
-        'You must now open a pull request at $newPrLink',
-        'verify pre-submit CI builds on your pull request are successful, merge your ',
-        'pull request, validate post-submit CI.',
-      ].join('\n');
-    case ReleasePhase.VERIFY_RELEASE:
-      return 'Release archive packages must be verified on cloud storage: ${luciConsoleLink(state.framework.candidateBranch, 'packaging')}';
-    case ReleasePhase.RELEASE_COMPLETED:
-      if (state.releaseChannel == 'beta') {
-        return <String>[
-          betaPostReleaseMsg,
-          '-----------------------------------------------------------------------',
-          'This release has been completed.',
-        ].join('\n');
-      }
-      return <String>[
-        stablePostReleaseMsg,
-        '-----------------------------------------------------------------------',
-        'This release has been completed.',
-      ].join('\n');
   }
   // For analyzer
   throw globals.ConductorException('Unimplemented phase ${state.currentPhase}');

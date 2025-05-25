@@ -28,7 +28,7 @@ class Remote {
   final RemoteName _name;
 
   /// The name of the remote.
-  String get name => switch (_name) {
+  String get name => switch (name) {
     RemoteName.upstream => 'upstream',
     RemoteName.mirror => 'mirror',
   };
@@ -153,7 +153,7 @@ abstract class Repository {
     }
 
     _checkoutDirectory = parentDirectory.childDirectory(name);
-    await lazilyInitialize(_checkoutDirectory!);
+    await lazilyInitialize(_checkoutDirectory);
 
     return _checkoutDirectory!;
   }
